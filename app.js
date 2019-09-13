@@ -1,6 +1,17 @@
 const express = require('express');
+const passport = require('passport');
+const bodyParser = require('body-parser');
 const app = express();
-const port = 3000;
+
+/**
+ * ----------------------------
+ * ---- Define handlers
+ * ----------------------------
+ */
+
+const login = function(){};
+
+const status = function(user) {};
 
 /**
  * ----------------------------
@@ -9,6 +20,7 @@ const port = 3000;
  */
 
 app.get('/', (req, res) => res.send('Hello World!'));
+app.get('/status/')
 
 // Start the server
-app.listen(port, () => console.log(`We are listening on ${port}`));
+app.listen(process.env.PORT || 3000, () => console.log(`We are listening`));
