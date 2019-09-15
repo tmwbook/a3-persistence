@@ -1,11 +1,16 @@
-const lowdb = require('lowdb');
+const low = require('lowdb');
 // Running the DB in synchronus mode
 const FileSync = require('lowdb/adapters/FileSync');
 const pwd = require('pwd');
 const moment = require('moment');
 
 const adapater = new FileSync('db.json');
-const db = lowdb(adapater);
+let db = null;
+
+const init_db = async function(){
+  db = low(adapater)
+  db.defaults({users: []}).write();
+}
 
 /*
 user {
@@ -21,13 +26,14 @@ user {
 }
 */
 
-db.defults({users: []});
 
 const fetch_user = function(user){
-  return db.get('users').find({'username': user}).value();
+  return db.get('users').find({'username': user});
 }
 
 /**
+ * @returns Promise that will resolve when the new user
+ * is stored in the db
  * @param {string} name desired username
  * @param {string} pass unashed password
  */
@@ -39,14 +45,14 @@ const add_user = function(name, pass){
     salt: null,
     clocks: [],
   }
-  pwd.hash(pass).then( result => {
+  return pwd.hash(pass).then( result => {
     user.hash = result.hash;
     user.salt = result.salt;
-  });
 
-  db.get('users')
+     db.get('users')
     .push(user)
     .write();
+  });
 }
 
 
@@ -71,7 +77,7 @@ const add_clock = function(username, title){
       title: title,
       zero_point: moment(),
     }
-  )
+  ).write();
 }
 
-module.exports = {db, add_clock, get_clocks, add_user};
+module.exports = {db, add_clock, get_clocks, add_user, init_db};
