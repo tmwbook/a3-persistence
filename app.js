@@ -1,6 +1,9 @@
 const express = require('express');
 const passport = require('passport');
 const bodyParser = require('body-parser');
+
+const db_utils = require('./db_utils');
+
 const app = express();
 
 /**
