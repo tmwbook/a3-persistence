@@ -1,6 +1,9 @@
 const express = require('express');
 const passport = require('passport');
+const session = require('express-session');
+const LocalStrategy = require('passport-local').Strategy;
 const bodyParser = require('body-parser');
+const pwd = require('pwd');
 
 const db_utils = require('./db_utils');
 
@@ -15,6 +18,36 @@ const DEBUG = true;
  */
 
 app.use(express.static('public'));
+app.use(session({secret: "session_secret"}));
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+/**
+ * ---------------------------
+ * ---- Passport Helpers
+ * ---------------------------
+ */
+
+passport.serializeUser(function(user, done){
+  done(null, user);
+ })
+
+passport.deserializeUser(function(user, done){
+  done(null, db_utils.fetch_user(user));
+})
+
+passport.use(new LocalStrategy(
+  function(username, password, done){
+    const user = db_utils.fetch_user(username);
+    pwd.hash(password, user.get("salt").value())
+    .then(() => {
+      return done(null, user.get('username').value());
+    }).catch(() => {
+      return done(null, false, {message: "Invalid username or password"});
+    })
+  }
+))
 
 /**
  * ----------------------------
@@ -22,9 +55,7 @@ app.use(express.static('public'));
  * ----------------------------
  */
 
-const login = function(){};
-
-const status = function(user, request, response) {};
+const status = function(request, response) {};
 
 /**
  * ----------------------------
@@ -33,6 +64,11 @@ const status = function(user, request, response) {};
  */
 
 app.get('/', (req, res) => res.send('Hello World!'));
+app.post('/login', passport.authenticate('local', {
+  successRedirect: '/status',
+  failureRedirect: '/login',
+  failureFlash: true,
+}));
 app.get('/status/:user', status);
 
 // Start the server

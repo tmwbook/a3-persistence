@@ -80,4 +80,4 @@ const add_clock = function(username, title){
   ).write();
 }
 
-module.exports = {db, add_clock, get_clocks, add_user, init_db};
+module.exports = {db, add_clock, get_clocks, add_user, init_db, fetch_user};
