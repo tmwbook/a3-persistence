@@ -1,20 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
 {% include "header.html" %}
+    <link rel="stylesheet" href="/css/status.css">
+</head>
 <body>
-    <ul>
-    {% for clock in clocks %}
-        <li>{{ clock.title }} - <span id="clock-{{ loop.index0 }}"></span></li>
-    {% endfor %}
-    </ul>
+    <div class="container">
+        <h1>Active clocks for {{ user }}</h1>
+        <nav>
+            <button type="button" class="btn btn-primary m-3">New Clock</button>
+            <button type="button" class="btn btn-secondary m-3">Logout</button>
+        </nav>
+        <ul class="list-group list-group-flush">
+        {% for clock in clocks %}
+            <li class="list-group-item">
+                <h2>{{ clock.title }}</h2>
+                <div id="clock-{{ loop.index0 }}" class="p-3 no-break"></div>
+                <button type="button" id="reset-{{ loop.index0 }}" class="btn btn-danger btn-block">Reset</button>
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
     <script>
         let clock_timers = [];
         for(let i=0; i<{{ clocks | length}}; i+=1){
             clock_timers.push($('#clock-'+i).FlipClock({}));
+            $("#reset-"+i).click(function() {
+                fetch("/reset", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({clock: i})
+                });
+                clock_timers[i].setTime(0);
+            });
         }
         {% for clock in clocks %}
         clock_timers[{{ loop.index0 }}].setTime(moment().diff(moment("{{ clock.zero_point }}"), "seconds"))
         {% endfor %}
     </script>
+    <br>
 </body>
 </html>

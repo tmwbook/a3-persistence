@@ -80,4 +80,8 @@ const add_clock = function(username, title){
   ).write();
 }
 
-module.exports = {db, add_clock, get_clocks, add_user, init_db, fetch_user};
+const reset_clock = function(user, index){
+  user.get(`clocks[${index}]`).assign({zero_point: moment()}).write(); 
+}
+
+module.exports = {db, add_clock, get_clocks, add_user, init_db, fetch_user, reset_clock};

@@ -10,7 +10,7 @@ const db_utils = require('./db_utils');
 
 const app = express();
 
-const DEBUG = true;
+const DEBUG = false;
 
 /**
  * ----------------------------
@@ -21,6 +21,7 @@ const DEBUG = true;
 app.use(express.static('public'));
 app.use(session({secret: "session_secret"}));
 app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json())
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -67,6 +68,7 @@ passport.use(new LocalStrategy(
 nunjucks.configure('views', {
   autoescape: true,
   express: app,
+  watch: DEBUG,
 });
 
 /**
@@ -77,11 +79,18 @@ nunjucks.configure('views', {
 
 const status = function(request, response) {
   response.render('status.html', {
-    title: `Status for ${request.user.get('username').value()}`,
     clocks: request.user.get('clocks').value(),
-    user: request.user.get('username'),
+    user: request.user.get('username').value(),
   });
 };
+
+const resetClock = function(request, response){
+  const clock_index = request.body.clock;
+  db_utils.reset_clock(request.user, clock_index);
+  response.status(200).json({
+    message: "GOOD",
+  });
+}
 
 /**
  * ----------------------------
@@ -96,6 +105,7 @@ app.post('/login', passport.authenticate('local', {
   failureFlash: true,
 }));
 app.get('/status/', isAuthed, status);
+app.post('/reset', isAuthed, resetClock);
 
 // Start the server
 db_utils.init_db().then(() => {
