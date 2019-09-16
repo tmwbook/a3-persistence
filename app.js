@@ -15,7 +15,7 @@ const db_utils = require('./db_utils');
 
 const app = express();
 
-const DEBUG = true;
+const DEBUG = false;
 
 /**
  * ----------------------------
@@ -154,6 +154,11 @@ db_utils.init_db().then(() => {
     db_utils.add_user("User1", "hunter2").then(() => {
       db_utils.add_clock("User1", "Test Clock");
       db_utils.add_clock("User1", "2nd Clockening");
+    })
+    db_utils.add_user("User2", "hunter2").then(() => {
+      db_utils.add_clock("User2", "1st Clockening");
+      db_utils.add_clock("User2", "Deja Vu");
+      db_utils.add_clock("User2", "Back...and improved!");
     })
   }
 }).catch(e => {
