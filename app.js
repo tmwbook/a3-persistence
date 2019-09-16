@@ -1,3 +1,5 @@
+const path = require('path');
+
 const express = require('express');
 const passport = require('passport');
 const session = require('express-session');
@@ -6,6 +8,7 @@ const bodyParser = require('body-parser');
 const pwd = require('pwd');
 const nunjucks = require('nunjucks');
 const moment = require('moment');
+const favicon = require('serve-favicon');
 
 const db_utils = require('./db_utils');
 
@@ -19,6 +22,7 @@ const DEBUG = true;
  * ----------------------------
  */
 
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));  
 app.use(express.static('public'));
 app.use(session({secret: "session_secret"}));
 app.use(bodyParser.urlencoded({extended: false}));
