@@ -113,6 +113,12 @@ const addClock = function(request, response){
   response.redirect('/status');
 }
 
+const deleteClock = function(request, response){
+  const clock_index = request.body.clock;
+  db_utils.delete_clock(request.user, clock_index);
+  response.redirect('back');
+}
+
 /**
  * ----------------------------
  * ---- Define Routes
@@ -129,6 +135,7 @@ app.get('/status/', isAuthed, status);
 app.post('/reset', isAuthed, resetClock);
 app.get('/create', isAuthed, addClockView);
 app.post('/create', isAuthed, addClock);
+app.post('/delete', isAuthed, deleteClock);
 
 // Start the server
 db_utils.init_db().then(() => {

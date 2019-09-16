@@ -17,6 +17,7 @@
                 <h2>{{ clock.title }}</h2>
                 <div id="clock-{{ loop.index0 }}" class="p-3 no-break"></div>
                 <button type="button" id="reset-{{ loop.index0 }}" class="btn btn-danger btn-block">Reset</button>
+                <button type="button" id="delete-{{ loop.index0 }}" class="btn btn-danger btn-block">Delete</button>
             </li>
         {% endfor %}
         </ul>
@@ -34,6 +35,17 @@
                     body: JSON.stringify({clock: i})
                 });
                 clock_timers[i].setTime(0);
+            });
+            $("#delete-"+i).click(function() {
+                fetch("/delete", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({clock: i})
+                }).then(()=>{
+                    location.reload()
+                });
             });
         }
         {% for clock in clocks %}

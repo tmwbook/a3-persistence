@@ -85,4 +85,10 @@ const reset_clock = function(user, index){
   user.get(`clocks[${index}]`).assign({zero_point: moment()}).write(); 
 }
 
-module.exports = {db, add_clock, get_clocks, add_user, init_db, fetch_user, reset_clock};
+const delete_clock = function(user, index){
+  let clocks = user.get('clocks').value();
+  clocks.splice(index,1);
+  user.update({'clocks': clocks}).write();
+}
+
+module.exports = {db, add_clock, get_clocks, add_user, init_db, fetch_user, reset_clock, delete_clock};
