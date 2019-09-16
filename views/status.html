@@ -4,8 +4,17 @@
 <body>
     <ul>
     {% for clock in clocks %}
-        <li>{{ clock.title }}</li>
+        <li>{{ clock.title }} - <span id="clock-{{ loop.index0 }}"></span></li>
     {% endfor %}
     </ul>
+    <script>
+        let clock_timers = [];
+        for(let i=0; i<{{ clocks | length}}; i+=1){
+            clock_timers.push($('#clock-'+i).FlipClock({}));
+        }
+        {% for clock in clocks %}
+        clock_timers[{{ loop.index0 }}].setTime(moment().diff(moment("{{ clock.zero_point }}"), "seconds"))
+        {% endfor %}
+    </script>
 </body>
 </html>
