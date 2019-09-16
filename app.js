@@ -5,12 +5,13 @@ const LocalStrategy = require('passport-local').Strategy;
 const bodyParser = require('body-parser');
 const pwd = require('pwd');
 const nunjucks = require('nunjucks');
+const moment = require('moment');
 
 const db_utils = require('./db_utils');
 
 const app = express();
 
-const DEBUG = false;
+const DEBUG = true;
 
 /**
  * ----------------------------
@@ -92,6 +93,26 @@ const resetClock = function(request, response){
   });
 }
 
+const addClockView = function(request, response){
+  response.render('add_clock.html')
+}
+
+const addClock = function(request, response){
+  if(request.body.time_setting === "now"){
+    db_utils.add_clock(
+      request.user.get('username').value(),
+      request.body.title
+    );
+  }else{
+    db_utils.add_clock(
+      request.user.get('username').value(),
+      request.body.title,
+      moment(request.body.start_date + request.body.start_time, "YYYY-MM-DDHH:mm")
+    );
+  }
+  response.redirect('/status');
+}
+
 /**
  * ----------------------------
  * ---- Define Routes
@@ -106,6 +127,8 @@ app.post('/login', passport.authenticate('local', {
 }));
 app.get('/status/', isAuthed, status);
 app.post('/reset', isAuthed, resetClock);
+app.get('/create', isAuthed, addClockView);
+app.post('/create', isAuthed, addClock);
 
 // Start the server
 db_utils.init_db().then(() => {

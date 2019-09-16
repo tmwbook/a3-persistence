@@ -66,16 +66,17 @@ const get_clocks = function(user){
 
 /**
  * Sets a clock with `title` for `username` with the zero point
- * at the current time.
+ * at the `start` time.
  * @param {string} username the username
  * @param {string} title name of the clock
+ * @param {moment} start a moment of the desired start time
  */
-const add_clock = function(username, title){
+const add_clock = function(username, title, start=moment()){
   let user = fetch_user(username);
   user.get('clocks').push(
     {
       title: title,
-      zero_point: moment(),
+      zero_point: start.format(),
     }
   ).write();
 }

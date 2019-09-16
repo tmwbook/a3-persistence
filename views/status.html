@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
 {% include "header.html" %}
-    <link rel="stylesheet" href="/css/status.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
     <div class="container">
-        <h1>Active clocks for {{ user }}</h1>
+        <h1>Active Timepieces for {{ user }}</h1>
         <nav>
-            <button type="button" class="btn btn-primary m-3">New Clock</button>
+            <a href="/create"><button type="button" class="btn btn-primary m-3">New Clock</button></a>
             <button type="button" class="btn btn-secondary m-3">Logout</button>
         </nav>
         <ul class="list-group list-group-flush">

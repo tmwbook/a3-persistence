@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{% include 'header.html' %}
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Add a New Timepiece</h1>
+        <form action="/create", method="POST">
+            <h2>Title:</h2>
+            <input type="text" name="title" required>
+            
+
+            <h2>Custom Time(in the past!):</h2>
+            <div>
+                <input type="date" name="start_date">
+                <input type="time" name="start_time">
+            </div>
+            <br>
+            <div>
+                <input type="radio" name="time_setting" value="now" checked >
+                <label for="time_setting">Start Timer Now</label>
+            </div>
+            <div>
+                <input type="radio" name="time_setting" value="custom" >
+                <label for="time_setting">Use Custom Time</label>
+            </div>
+            <input type="submit" value="Create Timepiece" class="btn btn-primary">
+        </form>
+        <br>
+    </div>
+    <script>
+    </script>
+</body>
+</html>
