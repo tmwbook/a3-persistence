@@ -23,6 +23,7 @@
     "express-session": "^1.16.2",
     "lowdb": "^1.0.0",
     "moment": "^2.24.0",
+    "nunjucks": "^3.2.0",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "pwd": "^1.1.0"

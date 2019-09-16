@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en">
+{% include "header.html" %}
+<body>
+    <ul>
+    {% for clock in clocks %}
+        <li>{{ clock.title }}</li>
+    {% endfor %}
+    </ul>
+</body>
+</html>
