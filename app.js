@@ -119,13 +119,17 @@ const deleteClock = function(request, response){
   response.redirect('back');
 }
 
+const logout = function(request, response){
+  request.session.destroy()
+  response.redirect('/');
+}
+
 /**
  * ----------------------------
  * ---- Define Routes
  * ----------------------------
  */
 
-app.get('/', (req, res) => res.send('Hello World!'));
 app.post('/login', passport.authenticate('local', {
   successRedirect: '/status',
   failureRedirect: '/login',
@@ -136,6 +140,7 @@ app.post('/reset', isAuthed, resetClock);
 app.get('/create', isAuthed, addClockView);
 app.post('/create', isAuthed, addClock);
 app.post('/delete', isAuthed, deleteClock);
+app.get('/logout', isAuthed, logout);
 
 // Start the server
 db_utils.init_db().then(() => {
