@@ -1,5 +1,6 @@
 const path = require('path');
 
+// You may not like it, but this is what the ideal 2547 packages looks like
 const express = require('express');
 const passport = require('passport');
 const session = require('express-session');
@@ -136,7 +137,7 @@ const logout = function(request, response){
 
 app.post('/login', passport.authenticate('local', {
   successRedirect: '/status',
-  failureRedirect: '/login',
+  failureRedirect: '/',
   failureFlash: true,
 }));
 app.get('/status/', isAuthed, status);
